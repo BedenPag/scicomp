@@ -70,6 +70,12 @@ plt.title('Error in Euler''s method and RK4 method')
 plt.legend()
 plt.show()
 
+# Define the true solution for the 2nd order ODE x'' = -x
+def true_sol(t):
+    x = np.sin(t) + np.cos(t)
+    y = np.cos(t) - np.sin(t)
+    return np.array([x, y])
+
 
 # Define the 2nd order ODE x'' = -x
 def f1(t, x):
@@ -83,21 +89,15 @@ def f1(t, x):
 x0 = np.array([1, 1]) # Initial condition, x = 1, y = 1
 
 
-# Solve the 2nd order ODE using Euler's method
+# Solve for x and y using Euler's method
 t_values, values_euler = solve_to(f1, x0, t0, deltat_max, euler_step)
 euler_x_values = [x[0] for x in values_euler]
 euler_y_values = [x[1] for x in values_euler]
-# Solve the 2nd order ODE using Runge-Kutta's method
+# Solve for x and y using Runge-Kutta's method
 t_values, values_rk4 = solve_to(f1, x0, t0, deltat_max, runge_kutta_step)
 rk4_x_values = [x[0] for x in values_rk4]
 rk4_y_values = [x[1] for x in values_rk4]
-
-
-def true_sol(t):
-        x = np.sin(t) + np.cos(t)
-        y = np.cos(t) - np.sin(t)
-        return np.array([x, y])
-
+# Calculate the true solution for x and y
 t = np.linspace(0, 20, 100)
 true = true_sol(t)
 true_x = true[0]
@@ -125,11 +125,44 @@ plt.legend()
 plt.show()
 
 
-# We can see that Euler's method is not accurate for this step size while Runge-Kutta's method is accurate for this step size
+# We can see that Euler's method is not accurate for this step size while Runge-Kutta's method is much more accurate for this step size
+# The true value is the same as the Runge-Kutta's method
 
-# If we use a smaller step size, we can see that Euler's method and Runge-Kutta's method both come out with the same solution
+# If we use a smaller step size, we can see that Euler's method becomes closer to the true value
 
 deltat_max = 0.01 # Step size
+# Solve for x and y using Euler's method
+t_values, values_euler = solve_to(f1, x0, t0, deltat_max, euler_step)
+euler_x_values = [x[0] for x in values_euler]
+euler_y_values = [x[1] for x in values_euler]
+# Solve for x and y using Runge-Kutta's method
+t_values, values_rk4 = solve_to(f1, x0, t0, deltat_max, runge_kutta_step)
+rk4_x_values = [x[0] for x in values_rk4]
+rk4_y_values = [x[1] for x in values_rk4]
+# Calculate the true solution for x and y
+t = np.linspace(0, 20, 100)
+true = true_sol(t)
+true_x = true[0]
+true_y = true[1]
 
+plt.subplot(2, 1, 1)
+# Plot the solution for x using Euler's method and Runge-Kutta's method and the true solution
+plt.plot(t_values, euler_x_values, label='Euler')
+plt.plot(t_values, rk4_x_values, label='Runge-Kutta', linestyle='--')
+plt.plot(t, true_x, label='True x', color='black', linestyle=':')
+plt.xlabel('t')
+plt.ylabel('x')
+plt.title('Solution for x using Euler''s method and RK4 method with a smaller step size')
+plt.legend()
+plt.subplot(2, 1, 2)
+# Plot the solution for y using Euler's method and Runge-Kutta's method and the true solution
+plt.plot(t_values, euler_y_values, label='Euler')
+plt.plot(t_values, rk4_y_values, label='Runge-Kutta', linestyle='--')
+plt.plot(t, true_y, label='True y', color='black', linestyle=':')
+plt.xlabel('t')
+plt.ylabel('y')
+plt.title('Solution for y using Euler''s method and RK4 method with a smaller step size')
+plt.legend()
+plt.show()
 
 
