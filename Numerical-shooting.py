@@ -10,8 +10,7 @@ Created on Fri Feb  10 11:16:50 2023
 
 import numpy as np
 from matplotlib import pyplot as plt
-from scipy.integrate import odeint
-from scipy.optimize import fsolve
+import scipy.integrate
 
 #%% Small b value
 
@@ -19,7 +18,7 @@ from scipy.optimize import fsolve
 def ode(t, u):
     x = u[0] # Number of prey
     y = u[1] # Number of predators
-    a = 0.5
+    a = 1
     d = 0.1
     b = 0.1
     dxdt = x*(1-x) - (a*x*y)/(d + x)
@@ -46,7 +45,7 @@ def solve_to(f, u0, t0, deltat_max, step_function):
     u = u0
     t_values = [t]
     values = [u]
-    while t <= 50:
+    while t <= 100:
         u = step_function(f, t, u, deltat_max)
         t += deltat_max
         t_values.append(t)
@@ -81,7 +80,7 @@ plt.show()
 def ode(t, u):
     x = u[0] # Number of prey
     y = u[1] # Number of predators
-    a = 0.5
+    a = 1
     d = 0.1
     b = 0.5
     dxdt = x*(1-x) - (a*x*y)/(d + x)
@@ -102,7 +101,7 @@ def solve_to(f, u0, t0, deltat_max, step_function):
     u = u0
     t_values = [t]
     values = [u]
-    while t <= 50:
+    while t <= 100:
         u = step_function(f, t, u, deltat_max)
         t += deltat_max
         t_values.append(t)
@@ -164,13 +163,3 @@ plt.xlabel('Prey')
 plt.ylabel('Predator')
 plt.title('Phase-Plane Plot with Shooting Method for a large b value')
 plt.show()
-
-
-
-
-
-
-
-
-
-# %%
