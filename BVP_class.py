@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 
 # Define the class
 class BVPclass:
-    
+    # oink oink Sim a pig oink oink
     def __init__(self, bcleft, bcright, f, step_function):
         self.bcleft = bcleft
         self.bcright = bcright
