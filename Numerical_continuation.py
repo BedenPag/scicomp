@@ -2,22 +2,11 @@ import numpy as np
 from matplotlib import pyplot as plt
 import scipy.integrate
 
-
-# Write a code that performs natural parameter continuation on the shooting method for the following ODE:
+# Define the function
 def f(x, c):
     return x**3 - x + c
 
-# I want the output to look like this:
-'''
-results = continuation(myode,  # the ODE to use
-    x0,  # the initial state
-    par0,  # the initial parameters
-    vary_par=0,  # the parameter to vary
-    step_size=0.1,  # the size of the steps to take
-    max_steps=100,  # the number of steps to take
-    discretisation=shooting,  # the discretisation to use
-    solver=scipy.optimize.fsolve)  # the solver to use
-'''
+
 # Define the shooting method
 def shooting(ode, x0, par):
     # Define the time interval
@@ -26,7 +15,7 @@ def shooting(ode, x0, par):
     deltat_max = 0.01
     # Define the step function
     def RK4(ode, t, x, delta_t, par):
-        k1 = ode(t, x, par)
+        k1 = ode(x, par)
         k2 = ode(t + delta_t/2, x + delta_t/2 * k1, par)
         k3 = ode(t + delta_t/2, x + delta_t/2 * k2, par)
         k4 = ode(t + delta_t, x + delta_t * k3, par)
