@@ -21,7 +21,7 @@ def euler_step(f, t, x, delta_t):
     return x + delta_t * f(t, x)
 
 # Runge-Kutta step function
-def runge_kutta_step(f, t, x, delta_t):
+def rk4_step(f, t, x, delta_t):
     k1 = f(t, x)
     k2 = f(t + delta_t/2, x + delta_t/2 * k1)
     k3 = f(t + delta_t/2, x + delta_t/2 * k2)
@@ -44,7 +44,7 @@ def solve_to(f, x0, t0, deltat_max, step_function):
 # Solve the first order ODE using Euler's method
 t_values, values = solve_to(f, x0, t0, deltat_max, euler_step)
 # solve the first order ODE using Runge-Kutta's method
-t_values, values = solve_to(f, x0, t0, deltat_max, runge_kutta_step)
+t_values, values = solve_to(f, x0, t0, deltat_max, rk4_step)
 
 # Calculate the error for eulers method for different step sizes 
 delta_t_values = np.logspace(-4, 0, 100)
@@ -60,7 +60,7 @@ plt.loglog(delta_t_values, error, label = 'Euler')
 delta_t_values = np.logspace(-4, 0, 100)
 error = []
 for t in delta_t_values:
-    t_values, values = solve_to(f, x0, t0, t, runge_kutta_step)
+    t_values, values = solve_to(f, x0, t0, t, rk4_step)
     x_analytical = np.exp(t_values)
     error.append(np.abs(values - x_analytical).max())
 plt.loglog(delta_t_values, error, label='Runge-Kutta')
@@ -94,7 +94,7 @@ t_values, values_euler = solve_to(f1, x0, t0, deltat_max, euler_step)
 euler_x_values = [x[0] for x in values_euler]
 euler_y_values = [x[1] for x in values_euler]
 # Solve for x and y using Runge-Kutta's method
-t_values, values_rk4 = solve_to(f1, x0, t0, deltat_max, runge_kutta_step)
+t_values, values_rk4 = solve_to(f1, x0, t0, deltat_max, rk4_step)
 rk4_x_values = [x[0] for x in values_rk4]
 rk4_y_values = [x[1] for x in values_rk4]
 # Calculate the true solution for x and y
@@ -136,7 +136,7 @@ t_values, values_euler = solve_to(f1, x0, t0, deltat_max, euler_step)
 euler_x_values = [x[0] for x in values_euler]
 euler_y_values = [x[1] for x in values_euler]
 # Solve for x and y using Runge-Kutta's method
-t_values, values_rk4 = solve_to(f1, x0, t0, deltat_max, runge_kutta_step)
+t_values, values_rk4 = solve_to(f1, x0, t0, deltat_max, rk4_step)
 rk4_x_values = [x[0] for x in values_rk4]
 rk4_y_values = [x[1] for x in values_rk4]
 # Calculate the true solution for x and y
