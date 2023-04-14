@@ -7,7 +7,10 @@ import matplotlib.pyplot as plt
 def continuation(f, x0, par0, vary_par, step_size, max_steps, discretisation, solver):
     t0 = 0
     deltat_max = 0.01
-    u0 = x0 + par0
+    # Initial guess for the parameter
+    u0 = [x0, vary_par]
+    u0[-1] = par0
+    # Solve the equation
     t_values, values = solve_to_shooting(f, u0, t0, deltat_max, solver, phase_condition)
     results = [(par0, t_values, values)]
     for i in range(max_steps):
@@ -20,15 +23,16 @@ def continuation(f, x0, par0, vary_par, step_size, max_steps, discretisation, so
     return results
 
 # test function
-def f(x, c):
-    return x**3 - x + c
+def cubic_ode(t, u):
+    x, c = u
+    return [x**3 - x + c, 0]
 
 # Define the initial guess and the parameter range
 x0 = 0.5
 par0 = -2
 
 # Solve the equation
-solutions = continuation(f, x0, par0, 0, 0.01, 400, lambda x:x, rk4_step)
+solutions = continuation(cubic_ode, x0, par0, 0, 0.01, 400, lambda x:x, rk4_step)
 
 # Plot the solution
 par_values = [sol[0] for sol in solutions]
