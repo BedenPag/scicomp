@@ -7,9 +7,6 @@ import scipy.optimize
 
 from BVP_class import BVPclass
 
-# I want to find umerical solutions to ODEs of the form D*d^2u/dx^2 + q(x,u;μ)=0, where x is the spatial variable, u is the solution, and μ is a parameter.
-# I want to solve this ODE for a range a < x < b, with boundary conditions u(a;μ) = γ_1 and u(b;μ) = γ_2.
-
 # boundary conditions
 gamma_1 = 4
 gamma_2 = 8
@@ -21,7 +18,7 @@ N = 50
 
 # define the function d^2u/dx^2 = 0
 def f(x, u):
-    
+
     return 0
 
 # define the grid
