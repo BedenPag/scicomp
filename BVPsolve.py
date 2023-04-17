@@ -10,15 +10,11 @@ def solve_dirichlet_bc(N, a, b, alpha, beta, q):
 
 
     # create two Dirichlet boundary conditions
-    bc_left = BoundaryCondition("Dirichlet", 0.0, alpha, beta)
-    bc_right = BoundaryCondition("Dirichlet", 0.0, alpha, beta)
+    bc_left = BoundaryCondition("Dirichlet", 0.0, alpha, beta,[],[])
+    bc_right = BoundaryCondition("Dirichlet", 0.0, alpha, beta,[],[])
 
     # create the matrix A and the vector b
     A, b = construct_A_and_b(grid, bc_left, bc_right)
-
-    print(A.shape)
-    print(b.shape)
-    print(q(x[1:-1]).shape)
 
     # solve the linear system
     u = np.linalg.solve(A, -b - dx**2 * q(x[1:-1]))
@@ -40,23 +36,17 @@ def solve_neumann_bc(N, a, b,alpha,beta,delta, q):
     x = grid.x
 
     # create one Dirichlet and one Neumann boundary condition
-    bc_left = BoundaryCondition("Dirichlet", 0.0, alpha, beta)
-    bc_right = BoundaryCondition("Neumann", 0.0, alpha, delta)
+    bc_left = BoundaryCondition("Dirichlet", 0.0, alpha, beta,[],[])
+    bc_right = BoundaryCondition("Neumann", 0.0, alpha,[],[],delta)
 
     # create the matrix A and the vector b
     A, b = construct_A_and_b(grid, bc_left, bc_right)
-
-    print(A.shape)
-    print(b.shape)
-    print(q(x[1:]).shape)
 
     # solve the linear system
     u = np.linalg.solve(A, -b - dx**2 * q(x[1:]))
 
     # plot the solution and the true solution
-    u_exact = 1/2 * x * (1 - x)
     plt.plot(x[1:], u, 'o', label = 'Finite-difference solution')
-    plt.plot(x, u_exact, 'r', label = 'Exact solution')
     plt.xlabel('x')
     plt.ylabel('u(x)')
     plt.title('Finite-difference solution with Neumann BC')
@@ -70,8 +60,8 @@ def solve_robin_bc(N, a, b, alpha, beta,gamma, q):
     x = grid.x
 
     # create one Dirichlet and one Robin boundary condition
-    bc_left = BoundaryCondition("Dirichlet", 0.0, alpha, beta)
-    bc_right = BoundaryCondition("Robin", 0.0, alpha, gamma)
+    bc_left = BoundaryCondition("Dirichlet", 0.0, alpha, beta,[],[])
+    bc_right = BoundaryCondition("Robin", 0.0, alpha,[],gamma,[])
 
     # create the matrix A and the vector b
     A, b = construct_A_and_b(grid, bc_left, bc_right)
@@ -80,9 +70,7 @@ def solve_robin_bc(N, a, b, alpha, beta,gamma, q):
     u = np.linalg.solve(A, -b - dx**2 * q(x[1:-1]))
 
     # plot the solution and the true solution
-    u_exact = 1/2 * x * (1 - x)
     plt.plot(x[1:-1], u, 'o', label = 'Finite-difference solution')
-    plt.plot(x, u_exact, 'r', label = 'Exact solution')
     plt.xlabel('x')
     plt.ylabel('u(x)')
     plt.title('Finite-difference solution with Robin BC')
@@ -94,6 +82,6 @@ if __name__ == "__main__":
     a = 0
     b = 1
     q = lambda x: np.ones(np.size(x))
-    solve_dirichlet_bc(N, a, b,1,1, q)
-    solve_neumann_bc(N, a, b,1,1,1, q)
-    solve_robin_bc(N, a, b, 1, 1, 1 ,q)
+    solve_dirichlet_bc(N, a, b,0,0, q)
+    solve_neumann_bc(N, a, b,0,0,0, q)
+    solve_robin_bc(N, a, b, 0, 0, 1 ,q)
