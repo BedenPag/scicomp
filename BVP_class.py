@@ -37,12 +37,16 @@ class BVPclass:
         u[-1] = self.bcright
         for i in range(1, N-2):
             u[i] = (self.bcleft + self.bcright)/2
-        for i in range(0, 100):
+        for i in range(0, N):
             u = self.step_function(self, u, t, h)
+            print(u)
         return t, u
     
+    # Plot function using dots for eack step where a and b are the endpoints and N is the number of points
     def plot(self, a, b, N):
         t, u = self.solve(a, b, N)
-        plt.plot(t, u)
+        plt.plot(t, u, 'o')
+        plt.xlabel('x')
+        plt.ylabel('u(x)')
+        plt.title('Numerical solution')
         plt.show()
-
