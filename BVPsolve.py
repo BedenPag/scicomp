@@ -12,7 +12,7 @@ def solve_bvp(N, a, b, alpha, beta, q, bc_type, delta=None, gamma=None):
         b (float): Right boundary of the interval.
         alpha (float): Coefficient of the Dirichlet boundary condition at x=a.
         beta (float): Coefficient of the Dirichlet boundary condition at x=b.
-        q (function): Function representing the coefficient of the differential equation.
+        q (function): Function representing the coefficient added to the right-hand side of the PDE.
         bc_type (str): Type of boundary condition. Supported values: "dirichlet", "neumann", "robin".
         delta (float, optional): Coefficient of the Neumann boundary condition at x=b. Required for "neumann" BC. Default: None.
         gamma (float, optional): Coefficient of the Robin boundary condition at x=b. Required for "robin" BC. Default: None.
