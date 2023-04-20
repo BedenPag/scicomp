@@ -1,11 +1,11 @@
-
+# Code does not work for BE and CN methods but I am keeping it in my GitHub to show my progress
 import numpy as np
 import matplotlib.pyplot as plt
 from math import pi
 
-def heat_equation_solver(kappa, L, T, u_I, u_exact, mx, mt):
+def heat_equation_solver(kappa, L, T, u_I, u_exact, mx, mt, method):
     """
-    Solves the 1D heat equation using the forward Euler method.
+    Solves the 1D heat equation 
 
     Parameters:
         - kappa (float): diffusion constant
@@ -14,6 +14,7 @@ def heat_equation_solver(kappa, L, T, u_I, u_exact, mx, mt):
         - u_I (function): initial temperature distribution function u_I(x)
         - mx (int): number of grid points in space
         - mt (int): number of grid points in time
+        - method (string): method to use for solving the PDE
 
     Returns:
         - plot of the numerical solution and exact solution
@@ -40,8 +41,21 @@ def heat_equation_solver(kappa, L, T, u_I, u_exact, mx, mt):
     for j in range(0, mt):
         # Forward Euler timestep for the PDE
         # PDE discretized at position x[i], time t[j]
-        for i in range(1, mx):
-            u_t1[i] = u_t[i] + lamda * (u_t[i - 1] - 2 * u_t[i] + u_t[i + 1])
+        if method == 'FE':
+            for i in range(1, mx):
+                u_t1[i] = u_t[i] + lamda * (u_t[i - 1] - 2 * u_t[i] + u_t[i + 1])
+        # Backward Euler timestep for the PDE
+        # PDE discretized at position x[i], time t[j]
+        elif method == 'BE':
+            for i in range(1, mx):
+                u_t1[i] = (u_t[i] + lamda * (u_t[i - 1] + u_t[i + 1])) / (1 + 2 * lamda) # DOES NOT WORK
+        # Crank-Nicolson timestep for the PDE
+        # PDE discretized at position x[i], time t[j]
+        elif method == 'CN':
+            for i in range(1, mx):
+                u_t1[i] = (u_t[i] + 0.5 * lamda * (u_t[i - 1] - 2 * u_t[i] + u_t[i + 1])) / (1 + 0.5 * lamda) # DOES NOT WORK
+        else:
+            raise ValueError('Method not recognized, please choose from FE, BE, or CN')
 
         # Boundary conditions
         u_t1[0] = 0
@@ -60,7 +74,7 @@ def heat_equation_solver(kappa, L, T, u_I, u_exact, mx, mt):
     plt.show()
 
 # Define the problem parameters
-kappa = 1.0   # diffusion constant
+kappa = 0.5   # diffusion constant
 L = 1.0         # length of the domain
 T = 1.0         # final time
 
@@ -81,5 +95,4 @@ mt = 1000   # number of grid points in time
 
 # Call the heat_equation_solver function
 
-heat_equation_solver(kappa, L, T, u_I, u_exact, mx, mt)
-
+heat_equation_solver(kappa, L, T, u_I, u_exact, mx, mt, 'FE')
