@@ -3,10 +3,34 @@ import matplotlib.pyplot as plt
 
 # Euler step function
 def euler_step(f, t, x, delta_t):
+    '''
+    Take a single step using Euler's method.
+
+    Args:
+        f (callable): Function representing the ODE to be solved.
+        t (float): Current time.
+        x (float): Current value of the dependent variable.
+        delta_t (float): Time increment.
+    
+    Returns:
+        x (float): New value of the dependent variable.
+    '''
     return x + delta_t * f(t, x)
 
 # Runge-Kutta step function
 def rk4_step(f, t, x, delta_t):
+    '''
+    Take a single step using the Runge-Kutta method.
+
+    Args:
+        f (callable): Function representing the ODE to be solved.
+        t (float): Current time.
+        x (float): Current value of the dependent variable.
+        delta_t (float): Time increment.
+    
+    Returns:
+        x (float): New value of the dependent variable.
+    '''
     k1 = f(t, x)
     k2 = f(t + delta_t/2, x + delta_t/2 * k1)
     k3 = f(t + delta_t/2, x + delta_t/2 * k2)
