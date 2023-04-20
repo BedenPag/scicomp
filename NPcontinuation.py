@@ -1,4 +1,4 @@
-from ODEsolver import rk4_step
+from ODEsolve import rk4_step
 from Shooting_method import solve_to_shooting, phase_condition
 
 import matplotlib.pyplot as plt

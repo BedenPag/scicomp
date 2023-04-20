@@ -1,4 +1,4 @@
-from ODEsolver import solve_to, rk4_step
+from ODEsolve import solve_to, rk4_step
 
 # Phase condition function using the initial conditions for ODE with one variables
 def phase_condition(u0, u1):
