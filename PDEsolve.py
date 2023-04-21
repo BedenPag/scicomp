@@ -160,7 +160,7 @@ def solve_pde(N, a, b, D, u0, t_max, dt, bc_type, method, q, alpha, beta, delta=
 
 # define the source term for the bratu equation (e^mu*u)
 def q(x, t, u, mu):
-    return 1
+    return np.exp(mu*u)
 
 # define the initial condition
 def u0(x, t):
