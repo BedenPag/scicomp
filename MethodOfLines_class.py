@@ -6,8 +6,8 @@ class Grid:
         self.N = N
         self.a = a
         self.b = b
-        self.dx = (b - a) / (N-1)
-        self.x = np.linspace(a, b, N-1)
+        self.dx = (b - a) / (N)
+        self.x = np.linspace(a, b, N)
         
 class BoundaryCondition:
     def __init__(self, kind, value, alpha=0, beta=0, gamma=0, delta=0):
@@ -35,52 +35,46 @@ class BoundaryCondition:
         '''
 
         if self.kind == "Dirichlet":
-            # delete the first row and the last column of A
-            A = np.delete(A, 0, 0)
-            A = np.delete(A, 0, 1)
-
-            # delete the first element of b
-            b = np.delete(b, 0)
+            A = A[1:-1, 1:-1]
+            b = b[1:-1]
             # modify A
             A[-1,-2] = 1
             # modify the last row and the last element of b
-            b[0] = self.alpha
-            b[-1] = self.beta
+            b[0] = self.alpha # Dirichlet condition at x=a
+            b[-1] = self.beta # Dirichlet condition at x=b
             return A, b
             
         elif self.kind == "Neumann":
+            A = A[1:, 1:]
+            b = b[1:]
             # modify A
             A[-1, -2] = 2
 
             # modify the first and last element of b
-            b[0] = self.alpha
-            b[-1] = 2*self.delta*grid.dx
+            b[0] = self.alpha # Dirichlet condition at x=a
+            b[-1] = 2*self.delta*grid.dx # Neumann condition at x=b
 
             return A, b
 
         elif self.kind == "Robin":
-            # delete the first row and the last column of A
-            A = np.delete(A, 0, 0)
-            A = np.delete(A, 0, 1)
-
-            # delete the first element of b
-            b = np.delete(b, 0)
+            A = A[1:-1, 1:-1]
+            b = b[1:-1]
             # modify A
             A[-1, -1] = -2*(1+self.gamma*grid.dx) 
             A[-1, -2] = 2
             # modify the first and last element of b
-            b[0] -= self.alpha
-            b[-1] += self.gamma*grid.dx
+            b[0] -= self.alpha # Dirichlet condition at x=a
+            b[-1] += self.gamma*grid.dx # Robin condition at x=b
 
             return A, b
             
         else:
             raise ValueError("Unsupported boundary condition. Please choose 'Dirichlet' or 'Neumann' or 'Robin'.")
         
-def construct_A_and_b(grid, bc_left, bc_right):
+def construct_A_and_b(grid, bc_type):
     N = grid.N
     # construct the matrix A
-    A = np.zeros((N-1, N-1))
+    A = np.zeros((N, N))
     for i in range(0, len(A)-1):
         A[i, i-1] = 1
         A[i, i+1] = 1 
@@ -89,6 +83,5 @@ def construct_A_and_b(grid, bc_left, bc_right):
 
     # apply the boundary conditions
     b = np.zeros(len(A))
-    A, b = bc_left.apply(A, b, grid)
-    A, b = bc_right.apply(A, b, grid)
-    return A,b
+    A, b = bc_type.apply(A, b, grid)
+    return A, b

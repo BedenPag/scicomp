@@ -1,10 +1,10 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from BVP_class import Grid, BoundaryCondition, construct_A_and_b
+from MethodOfLines_class import Grid, BoundaryCondition, construct_A_and_b
 
-def solve_bvp(N, a, b, alpha, beta, q, bc_type, delta=None, gamma=None):
+def solve_bvp(N, a, b, alpha, beta, q, bc_type, gamma=None, delta=None):
     """
-    Solves a boundary value problem (BVP) using finite-difference method with different types of boundary conditions.
+    Solves a boundary value problem d^2u/dx^2 + q(x) = 0 using finite-difference method with different types of boundary conditions.
 
     Args:
         N (int): Number of grid points.
@@ -14,8 +14,8 @@ def solve_bvp(N, a, b, alpha, beta, q, bc_type, delta=None, gamma=None):
         beta (float): Coefficient of the Dirichlet boundary condition at x=b.
         q (function): Function representing the coefficient added to the right-hand side of the PDE.
         bc_type (str): Type of boundary condition. Supported values: "dirichlet", "neumann", "robin".
-        delta (float, optional): Coefficient of the Neumann boundary condition at x=b. Required for "neumann" BC. Default: None.
         gamma (float, optional): Coefficient of the Robin boundary condition at x=b. Required for "robin" BC. Default: None.
+        delta (float, optional): Coefficient of the Neumann boundary condition at x=b. Required for "neumann" BC. Default: None.
 
     Returns:
         None
@@ -27,21 +27,22 @@ def solve_bvp(N, a, b, alpha, beta, q, bc_type, delta=None, gamma=None):
 
     if bc_type == "dirichlet":
         # create two Dirichlet boundary conditions
-        bc_left = BoundaryCondition("Dirichlet", 0.0, alpha, beta,[],[])
-        bc_right = BoundaryCondition("Dirichlet", 0.0, alpha, beta,[],[])
+        bc = BoundaryCondition("Dirichlet", 0.0, alpha, beta,[],[])
     elif bc_type == "neumann":
         # create one Dirichlet and one Neumann boundary condition
-        bc_left = BoundaryCondition("Dirichlet", 0.0, alpha, beta,[],[])
-        bc_right = BoundaryCondition("Neumann", 0.0, alpha,[],[],delta)
+        bc = BoundaryCondition("Neumann", 0.0, alpha,[],[],delta)
     elif bc_type == "robin":
         # create one Dirichlet and one Robin boundary condition
-        bc_left = BoundaryCondition("Dirichlet", 0.0, alpha, beta,[],[])
-        bc_right = BoundaryCondition("Robin", 0.0, alpha,[],gamma,[])
+        bc = BoundaryCondition("Robin", 0.0, alpha,[],gamma,[])
     else:
         raise ValueError("Invalid boundary condition type. Supported values are 'dirichlet', 'neumann', and 'robin'.")
 
     # create the matrix A and the vector b
-    A, b = construct_A_and_b(grid, bc_left, bc_right)
+    A, b = construct_A_and_b(grid, bc)
+    #print(A.shape)
+    #print(b.shape)
+    #print(q(x[1:-1]).shape)
+    #print(q(x[1:]).shape)
 
     # plot the solution and the true solution
     if bc_type == "dirichlet":
@@ -73,6 +74,6 @@ if __name__ == "__main__":
     gamma = 1
     delta = 0
     q = lambda x: np.ones(np.size(x))
-    solve_bvp(N, a, b, alpha, beta, q, "dirichlet")
-    solve_bvp(N, a, b, alpha, beta, q, "neumann", delta=delta)
-    solve_bvp(N, a, b, alpha, beta, q, "robin", gamma=gamma)
+    solve_bvp(N, a, b, alpha, beta, q, "dirichlet", gamma, delta)
+    solve_bvp(N, a, b, alpha, beta, q, "neumann", gamma, delta)
+    solve_bvp(N, a, b, alpha, beta, q, "robin", gamma, delta)
