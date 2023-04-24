@@ -39,10 +39,6 @@ def solve_bvp(N, a, b, alpha, beta, q, bc_type, gamma=None, delta=None):
 
     # create the matrix A and the vector b
     A, b = construct_A_and_b(grid, bc)
-    #print(A.shape)
-    #print(b.shape)
-    #print(q(x[1:-1]).shape)
-    #print(q(x[1:]).shape)
 
     # plot the solution and the true solution
     if bc_type == "dirichlet":
