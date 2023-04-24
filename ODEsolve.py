@@ -56,8 +56,10 @@ def solve_to(f, x0, t0, deltat_max, step_function, true_sol=None):
     '''
     if f is None:
         raise ValueError('No function provided. The function requires the form solve_to(f, x0, t0, deltat_max, step_function, true_sol=None).')
-    elif f.__code__.co_argcount != 2:
-        raise ValueError('Invalid function provided. The function must have the form f(t, u) where t is the time and u is the dependent variable(s).')
+    elif f.__code__.co_argcount < 2:
+        raise ValueError('Invalid function provided. The function must have the form f(t, u, a, b, c) where t is the time, u is the dependent variable(s) and a, b, c are optional parameters required.')
+    elif f.__code__.co_argcount > 5:
+        raise ValueError('Invalid function provided. The function must have the form f(t, u, a, b, c) where t is the time, u is the dependent variable(s) and a, b, c are optional parameters required.')
     elif x0 is None:
         raise ValueError('No initial condition provided. The function requires the form solve_to(f, x0, t0, deltat_max, step_function, true_sol=None).')
     elif t0 is None:
