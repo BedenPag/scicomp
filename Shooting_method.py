@@ -94,10 +94,5 @@ def plot_limit_cycle(f, u0, deltat_max, method):
     plt.plot(x_values, y_values)
     plt.xlabel('Prey')
     plt.ylabel('Predator')
-    # if the b value in the ODE is greater than 0.26 change the title
-    print(u0[1])
-    if u0[1] > 0.26:
-        plt.title('Limit Cycle for the Shooting Method with b = 0.5')
-    else:
-        plt.title('Limit Cycle for the Shooting Method with b = 0.1')
+    plt.title('Limit Cycle for the Shooting Method with b = 0.2')
     plt.show()

@@ -72,7 +72,7 @@ def solve_to(f, x0, t0, deltat_max, step_function, true_sol=None):
     x = x0
     t_values = [t]
     values = [x]
-    while t <= 20:
+    while t <= 30:
         x = step_function(f, t, x, deltat_max)
         t += deltat_max
         t_values.append(t)
@@ -139,7 +139,7 @@ def solve_euler_rk4(f, x0, t0, deltat_max, step_function, true_sol=None):
         y_values = [x[1] for x in values]
         # Calculate the true solution
         if true_sol is not None:
-            domain = np.linspace(0, 20, 100)
+            domain = np.linspace(0, 30, 100)
             true = true_sol(domain)
             true_x = true[0]
             true_y = true[1]
