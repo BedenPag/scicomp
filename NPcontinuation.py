@@ -3,7 +3,7 @@ from Shooting_method import solve_to_shooting, phase_condition
 
 import matplotlib.pyplot as plt
 
-# Cotinuation function
+# Naturl parameter cotinuation function
 def continuation(f, x0, par0, vary_par, step_size, max_steps, discretisation, solver):
     t0 = 0
     deltat_max = 0.01
@@ -11,14 +11,14 @@ def continuation(f, x0, par0, vary_par, step_size, max_steps, discretisation, so
     u0 = [x0, vary_par]
     u0[-1] = par0
     # Solve the equation
-    t_values, values = solve_to_shooting(f, u0, t0, deltat_max, solver, phase_condition)
+    t_values, values = solve_to_shooting(f, u0, t0, deltat_max, solver)
     results = [(par0, t_values, values)]
     for i in range(max_steps):
         u0 = values[-1]
         print(u0)
         par0 = par0 + step_size
         u0[-1] = par0
-        t_values, values = discretisation(f, u0, t0, deltat_max, solver, phase_condition)
+        t_values, values = discretisation(f, u0, t0, deltat_max, solver)
         results.append((par0, t_values, values))
     return results
 
