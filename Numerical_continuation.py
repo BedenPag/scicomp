@@ -7,11 +7,10 @@ def f(x, c):
 
 def cubic_continuation(f, x0, c0, step_size, max_steps, solver, method):
     results = []
-    for i in range(max_steps):
+    if method == 'natural':
+        for i in range(max_steps):
         # Update the parameter value
-        c = c0 + i*step_size
-        
-        if method == 'natural':
+            c = c0 + i*step_size
             # Solve the equation for the current parameter value
             sol = solver(lambda x: f(x, c), x0)
 
@@ -26,30 +25,30 @@ def cubic_continuation(f, x0, c0, step_size, max_steps, solver, method):
                 results.append((c, sol[0]))
                 x0 = sol[0]
             else:
-                raise ValueError('Unknown solver')
-        elif method == 'arclength':
-            # Psuedo-arclength continuation
-            # Define the tangent direction
-            def df(x, c):
-                return 3*x**2 - 1
+                raise ValueError('Unknown solver. Please use "root" or "fsolve"')
+    elif method == 'arclength':
+        # Psuedo-arclength continuation
+        # Define the tangent direction
+        def df(x, c):
+            return 3*x**2 - 1
             
-            # Solve the equation for the current parameter value and tangent direction
-            sol = solver(lambda x: np.array([f(x[0], c) - x[1], df(x[0], c) - x[2], x[1]**2 + x[2]**2 - 1]), np.array([x0, 0, 1]))
+        # Solve the equation for the current parameter value and tangent direction
+        sol = solver(lambda x: np.array([f(x[0], c) - x[1], df(x[0], c) - x[2], x[1]**2 + x[2]**2 - 1]), np.array([x0, 0, 1]))
 
-            # Store the solution
-            if solver.__name__ == 'root':
-                if sol.success:
-                    results.append((c, sol.x[0]))
-                    x0 = sol.x[0]
-                else:
-                    print('Solver failed at c =', c)
-            elif solver.__name__ == 'fsolve':
-                results.append((c, sol[0]))
-                x0 = sol[0]
+        # Store the solution
+        if solver.__name__ == 'root':
+            if sol.success:
+                results.append((c, sol.x[0]))
+                x0 = sol.x[0]
             else:
-                raise ValueError('Unknown solver')
+                print('Solver failed at c =', c)
+        elif solver.__name__ == 'fsolve':
+            results.append((c, sol[0]))
+            x0 = sol[0]
         else:
-            raise ValueError('Unknown method, please use "natural" or "arclength"')
+            raise ValueError('Unknown solver')
+    else:
+        raise ValueError('Unknown method, please use "natural" or "arclength"')
 
     return results
 

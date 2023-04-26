@@ -18,7 +18,7 @@ t0 = 0 # Initial time
 
 # Euler step function
 def euler_step(f, t, x, delta_t):
-    return x + delta_t * f(t, x)
+    return x+delta_t*f(t, x)
 
 # Runge-Kutta step function
 def rk4_step(f, t, x, delta_t):

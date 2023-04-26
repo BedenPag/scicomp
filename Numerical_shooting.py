@@ -163,3 +163,12 @@ plt.xlabel('Prey')
 plt.ylabel('Predator')
 plt.title('Phase-Plane Plot with Shooting Method for a large b value')
 plt.show()
+
+# Plot the solution
+plt.plot(t_values, x_values, label='Prey')
+plt.plot(t_values, y_values, label='Predator')
+plt.xlabel('Time')
+plt.ylabel('Population')
+plt.title('Predator-Prey Model using Shooting Method for a large b value')
+plt.legend()
+plt.show()
