@@ -61,7 +61,6 @@ def solve_pde(N, a, b, D, u0, t_max, dt, bc_type, method, q, alpha, beta, delta=
     dx = grid.dx
     x = grid.x
     C = D*dt/dx**2
-    print('C = ', C)
 
     # create the time grid
     t = np.ceil(t_max/dt)
@@ -205,11 +204,11 @@ def plot_method_forall_bctypes(bctype):
     if bctype not in ["dirichlet", "neumann", "robin"]:
         raise ValueError("bctype must be either 'dirichlet', 'neumann', or 'robin'.")
     if bctype == "dirichlet":
-        u,x = solve_pde(N=10, a=0.0, b=1.0, D=1, u0=u0, t_max=1.0, dt=0.001, bc_type=bctype, method="explicit", q=q, alpha=0.0, beta=0.0, delta=0.0, gamma=0.0)
+        u,x = solve_pde(N=20, a=0.0, b=1.0, D=1, u0=u0, t_max=1.0, dt=0.001, bc_type=bctype, method="explicit", q=q, alpha=0.0, beta=0.0, delta=0.0, gamma=0.0)
         plt.plot(x[1:-1], u[-1], 'o', label="explicit")
-        u,x = solve_pde(N=10, a=0.0, b=1.0, D=1, u0=u0, t_max=1.0, dt=0.001, bc_type=bctype, method="implicit", q=q, alpha=0.0, beta=0.0, delta=0.0, gamma=0.0)
+        u,x = solve_pde(N=20, a=0.0, b=1.0, D=1, u0=u0, t_max=1.0, dt=0.001, bc_type=bctype, method="implicit", q=q, alpha=0.0, beta=0.0, delta=0.0, gamma=0.0)
         plt.plot(x[1:-1], u[-1], '--', label="implicit")
-        u,x = solve_pde(N=10, a=0.0, b=1.0, D=1, u0=u0, t_max=1.0, dt=0.001, bc_type=bctype, method="crank-nicolson", q=q, alpha=0.0, beta=0.0, delta=0.0, gamma=0.0)
+        u,x = solve_pde(N=20, a=0.0, b=1.0, D=1, u0=u0, t_max=1.0, dt=0.001, bc_type=bctype, method="crank-nicolson", q=q, alpha=0.0, beta=0.0, delta=0.0, gamma=0.0)
         plt.plot(x[1:-1], u[-1], linewidth=0.5, label="crank-nicolson")
         plt.xlabel("x")
         plt.ylabel("u")
@@ -217,11 +216,11 @@ def plot_method_forall_bctypes(bctype):
         plt.legend()
         plt.show()
     else:
-        u,x = solve_pde(N=10, a=0.0, b=1.0, D=1, u0=u0, t_max=1.0, dt=0.001, bc_type=bctype, method="explicit", q=q, alpha=0.0, beta=0.0, delta=0.0, gamma=0.0)
+        u,x = solve_pde(N=20, a=0.0, b=1.0, D=1, u0=u0, t_max=1.0, dt=0.001, bc_type=bctype, method="explicit", q=q, alpha=0.0, beta=0.0, delta=0.0, gamma=0.0)
         plt.plot(x[1:], u[-1], 'o',label="explicit")
-        u,x = solve_pde(N=10, a=0.0, b=1.0, D=1, u0=u0, t_max=1.0, dt=0.001, bc_type=bctype, method="implicit", q=q, alpha=0.0, beta=0.0, delta=0.0, gamma=0.0)
+        u,x = solve_pde(N=20, a=0.0, b=1.0, D=1, u0=u0, t_max=1.0, dt=0.001, bc_type=bctype, method="implicit", q=q, alpha=0.0, beta=0.0, delta=0.0, gamma=0.0)
         plt.plot(x[1:], u[-1], '--', label="implicit")
-        u,x = solve_pde(N=10, a=0.0, b=1.0, D=1, u0=u0, t_max=1.0, dt=0.001, bc_type=bctype, method="crank-nicolson", q=q, alpha=0.0, beta=0.0, delta=0.0, gamma=0.0)
+        u,x = solve_pde(N=20, a=0.0, b=1.0, D=1, u0=u0, t_max=1.0, dt=0.001, bc_type=bctype, method="crank-nicolson", q=q, alpha=0.0, beta=0.0, delta=0.0, gamma=0.0)
         plt.plot(x[1:], u[-1], linewidth=0.5, label="crank-nicolson")
         plt.xlabel("x")
         plt.ylabel("u")

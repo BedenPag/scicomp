@@ -17,6 +17,7 @@ def natural_param_cont(f, x0, c0, c1):
         c_array (array): Array of parameter values.
         solutions (array): Array of solutions.
     '''
+    
     c = np.linspace(c0, c1, 500) # Parameter range - interestingly it doesn't plot the entire range if num of points < 101
     solutions = [x0] # Initialise the solutions array
     c_array = [c0] # Initialise the parameter array
@@ -48,6 +49,7 @@ def arclength_cont(f, x0, c0, c1):
         c_array (array): Array of parameter values.
         solutions (array): Array of solutions.
     '''
+    
     c = np.linspace(c0, c1, 500)
     solutions = np.array([]) # Initialise the solutions array
     c_array = np.array([]) # Initialise the parameter array
@@ -104,6 +106,17 @@ def plot_continuation(f, x0, c0, c1, method):
     Returns:
         None - plots the solutions against the parameter.
     '''
+    if c0 > c1:
+        raise ValueError('c0 must be less than c1')
+    if c0 == c1:
+        raise ValueError('c0 must not equal c1')
+    if not isinstance(x0, (int, float)) or not isinstance(c0, (int, float)) or not isinstance(c1, (int, float)):
+        raise TypeError('x0, c0 and c1 must be numbers')
+    if not isinstance(method, str):
+        raise TypeError('method must be a string')
+    if method != 'natural' and method != 'arclength':
+        raise ValueError('Invalid method of continuation. Please enter either "natural" or "arclength"')
+
     if method == 'natural':
         c, x = natural_param_cont(f, x0, c0, c1)
         plt.plot(c, x, 'o')
@@ -118,8 +131,6 @@ def plot_continuation(f, x0, c0, c1, method):
         plt.ylabel('x')
         plt.title('Psuedo-arclength continuation')
         plt.show()
-    else:
-        raise ValueError('Invalid method of continuation. Please enter either "natural" or "arclength"')
 
 plot_continuation(f, x0, c0, c1, 'natural')
 plot_continuation(f, x0, c0, c1, 'arclength')
