@@ -20,8 +20,10 @@ def solve_bvp(N, a, b, alpha, beta, q, bc_type, gamma=None, delta=None):
     Returns:
         None - plots the solution.
     """
-    if N < 1:
+    if N <= 1:
         raise ValueError("N must be greater than or equal to 1.")
+    if not isinstance(N, int):
+        raise TypeError("N must be an integer.")
     if a >= b:
         raise ValueError("a must be less than b.")
     if a == b:
@@ -38,6 +40,8 @@ def solve_bvp(N, a, b, alpha, beta, q, bc_type, gamma=None, delta=None):
         raise TypeError("alpha, beta, gamma, and delta must be numbers.")
     if q is None:
         raise ValueError("q must be provided. If q is constant, use lambda x: constant.")
+    if bc_type not in ["dirichlet", "neumann", "robin"]:
+        raise ValueError("Invalid boundary condition type. Supported values are 'dirichlet', 'neumann', and 'robin'.")
     
     # create the finite-difference grid
     grid = Grid(N=N, a=a, b=b)
@@ -53,8 +57,6 @@ def solve_bvp(N, a, b, alpha, beta, q, bc_type, gamma=None, delta=None):
     elif bc_type == "robin":
         # create one Dirichlet and one Robin boundary condition
         bc = BoundaryCondition("Robin", 0.0, alpha,[],gamma,[])
-    else:
-        raise ValueError("Invalid boundary condition type. Supported values are 'dirichlet', 'neumann', and 'robin'.")
 
     # create the matrix A and the vector b
     A, b = construct_A_and_b(grid, bc)
@@ -70,7 +72,7 @@ def solve_bvp(N, a, b, alpha, beta, q, bc_type, gamma=None, delta=None):
         # solve the linear system
         u = np.linalg.solve(A, -b - dx**2 * q(x[1:]))
         plt.plot(x[1:], u, 'o', label = 'Finite-difference solution')
-    else:
+    elif bc_type == "robin":
         # solve the linear system
         u = np.linalg.solve(A, -b - dx**2 * q(x[1:]))
         plt.plot(x[1:], u, 'o', label = 'Finite-difference solution')
