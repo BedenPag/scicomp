@@ -56,10 +56,10 @@ def solve_to(f, x0, t0, deltat_max, step_function, true_sol=None):
     '''
     if f is None:
         raise ValueError('No function provided. The function requires the form solve_to(f, x0, t0, deltat_max, step_function, true_sol=None).')
+    elif not callable(f):
+        raise TypeError('f must be a function')
     elif f.__code__.co_argcount < 2:
-        raise ValueError('Invalid function provided. The function must have the form f(t, u, a, b, c) where t is the time, u is the dependent variable(s) and a, b, c are optional parameters required.')
-    elif f.__code__.co_argcount > 5:
-        raise ValueError('Invalid function provided. The function must have the form f(t, u, a, b, c) where t is the time, u is the dependent variable(s) and a, b, c are optional parameters required.')
+        raise ValueError('The function provided must take two arguments: t and x.')
     elif x0 is None:
         raise ValueError('No initial condition provided. The function requires the form solve_to(f, x0, t0, deltat_max, step_function, true_sol=None).')
     elif t0 is None:
@@ -68,6 +68,13 @@ def solve_to(f, x0, t0, deltat_max, step_function, true_sol=None):
         raise ValueError('No step function provided. The function requires the form solve_to(f, x0, t0, deltat_max, step_function, true_sol=None).')
     elif step_function != euler_step and step_function != rk4_step:
         raise ValueError('Invalid step function provided. The function must be either euler_step or rk4_step.')
+    elif true_sol is not None and not callable(true_sol):
+        raise TypeError('true_sol must be a function')
+    elif true_sol is not None and true_sol.__code__.co_argcount < 1:
+        raise ValueError('The function provided for true_sol must take one argument: t.')
+    elif deltat_max <= 0:
+        raise ValueError('deltat_max must be positive.')
+    
     t = t0
     x = x0
     values = [x]
@@ -93,6 +100,7 @@ def compare_euler_rk4_error(f, x0, t0, delta_t_values):
     Returns:
         None: Plots the error vs. step size on a double logarithmic scale.
     """
+    
     # Initialize arrays to store error values
     error_euler = []
     error_rk4 = []

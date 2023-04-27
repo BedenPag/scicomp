@@ -106,6 +106,8 @@ def plot_continuation(f, x0, c0, c1, method):
     Returns:
         None - plots the solutions against the parameter.
     '''
+    if not callable(f):
+        raise TypeError('f must be a function')
     if c0 > c1:
         raise ValueError('c0 must be less than c1')
     if c0 == c1:

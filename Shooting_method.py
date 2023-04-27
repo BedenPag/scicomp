@@ -85,6 +85,16 @@ def plot_limit_cycle(f, u0, deltat_max, method):
     Returns:
         None - The plot for the limit cycle using the shooting method.
     '''
+    if not isinstance(method, str):
+        raise TypeError('method must be a string')
+    if method not in ['euler_step', 'rk4_step']:
+        raise ValueError('method must be "euler_step" or "rk4_step"')
+    if deltat_max <= 0:
+        raise ValueError('deltat_max must be positive')
+    if len(u0) != 2:
+        raise ValueError('u0 must be a list of length 2')
+    if not callable(f):
+        raise TypeError('f must be a function')
 
     t_values, values = solve_to_shooting(f, u0, 0, deltat_max, method)
     x_values = [x[0] for x in values] # Extract the x values from the list of values
