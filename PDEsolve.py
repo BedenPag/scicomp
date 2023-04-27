@@ -78,20 +78,20 @@ def solve_pde(N, a, b, D, u0, t_max, dt, bc_type, method, q, alpha, beta, delta=
         if dt > dx**2/(2*D):
             raise ValueError("The time step is too big. The maximum value is {}".format(dx**2/(2*D)))
         u = np.zeros((t+1, N-1))
-        u[0, :] = u0(x[1:-1], 0.0)
+        u[0, :] = u0(x[1:], 0.0)
         for i in range(t):
-            u[i+1] = u[i] + C*(A.dot(u[i])) + dt*q(x[1:-1], i*dt, u[i], 2)
-
+            u[i+1] = u[i] + C*(A.dot(u[i])) + dt*q(x[1:], i*dt, u[i], 2)
+    
     elif bc_type == "neumann" and method == "implicit":
         # create the boundary conditions
         bc= BoundaryCondition("Neumann", 0.0, 0.0,[],[],delta)
         # construct the matrix A and the vector b
         A, b = construct_A_and_b(grid, bc)
         u = np.zeros((t+1, N-1))
-        u[0, :] = u0(x[1:-1], 0.0)
+        u[0, :] = u0(x[1:], 0.0)
         LHS = np.eye(N-1) - C*A
         for i in range(t):
-            RHS = u[i] + C*b + dt*(q(x[1:-1], i*dt, u[i], 2))
+            RHS = u[i] + C*b + dt*(q(x[1:], i*dt, u[i], 2))
             u[i+1] = np.linalg.solve(LHS, RHS)
     elif bc_type == "neumann" and method == "crank-nicolson":
         # create the boundary conditions
@@ -99,10 +99,10 @@ def solve_pde(N, a, b, D, u0, t_max, dt, bc_type, method, q, alpha, beta, delta=
         # construct the matrix A and the vector b
         A, b = construct_A_and_b(grid, bc)
         u = np.zeros((t+1, N-1))
-        u[0, :] = u0(x[1:-1], 0.0)
+        u[0, :] = u0(x[1:], 0.0)
         LHS = np.eye(N-1) - 0.5*C*A
         for i in range(t):
-            RHS = (np.eye(N-1) + 0.5*C*A).dot(u[i]) + 0.5*dt*(q(x[1:-1], i*dt, u[i], 2) + q(x[1:-1], (i+1)*dt, u[i+1], 2))
+            RHS = (np.eye(N-1) + 0.5*C*A).dot(u[i]) + 0.5*dt*(q(x[1:], i*dt, u[i], 2) + q(x[1:], (i+1)*dt, u[i+1], 2))
             u[i+1] = np.linalg.solve(LHS, RHS)
     elif bc_type == "robin" and method == "explicit":
         # create the boundary conditions
@@ -112,31 +112,31 @@ def solve_pde(N, a, b, D, u0, t_max, dt, bc_type, method, q, alpha, beta, delta=
         # solve the PDE
         if dt > dx**2/(2*D):
             raise ValueError("The time step is too big. The maximum value is {}".format(dx**2/(2*D)))
-        u = np.zeros((t+1, N-2))
-        u[0, :] = u0(x[1:-1], 0.0)
+        u = np.zeros((t+1, N-1))
+        u[0, :] = u0(x[1:], 0.0)
         for i in range(t):
-            u[i+1] = u[i] + C*(A.dot(u[i])) + dt*q(x[1:-1], i*dt, u[i], 2)
+            u[i+1] = u[i] + C*(A.dot(u[i])) + dt*q(x[1:], i*dt, u[i], 2)
     elif bc_type == "robin" and method == "implicit":
         # create the boundary conditions
         bc= BoundaryCondition("Robin", 0.0, 0.0,[],gamma,[])
         # construct the matrix A and the vector b
         A, b = construct_A_and_b(grid, bc)
-        u = np.zeros((t+1, N-2))
-        u[0, :] = u0(x[1:-1], 0.0)
-        LHS = np.eye(N-2) - C*A
+        u = np.zeros((t+1, N-1))
+        u[0, :] = u0(x[1:], 0.0)
+        LHS = np.eye(N-1) - C*A
         for i in range(t):
-            RHS = u[i] + C*b + dt*(q(x[1:-1], i*dt, u[i], 2))
+            RHS = u[i] + C*b + dt*(q(x[1:], i*dt, u[i], 2))
             u[i+1] = np.linalg.solve(LHS, RHS)
     elif bc_type == "robin" and method == "crank-nicolson":
         # create the boundary conditions
         bc= BoundaryCondition("Robin", 0.0, 0.0,[],gamma,[])
         # construct the matrix A and the vector b
         A, b = construct_A_and_b(grid, bc)
-        u = np.zeros((t+1, N-2))
-        u[0, :] = u0(x[1:-1], 0.0)
-        LHS = np.eye(N-2) - 0.5*C*A
+        u = np.zeros((t+1, N-1))
+        u[0, :] = u0(x[1:], 0.0)
+        LHS = np.eye(N-1) - 0.5*C*A
         for i in range(t):
-            RHS = (np.eye(N-2) + 0.5*C*A).dot(u[i]) + 0.5*dt*(q(x[1:-1], i*dt, u[i], 2) + q(x[1:-1], (i+1)*dt, u[i+1], 2))
+            RHS = (np.eye(N-1) + 0.5*C*A).dot(u[i]) + 0.5*dt*(q(x[1:], i*dt, u[i], 2) + q(x[1:], (i+1)*dt, u[i+1], 2))
             u[i+1] = np.linalg.solve(LHS, RHS)
     elif bc_type != "dirichlet" and bc_type != "neumann" and bc_type != "robin":
         raise ValueError("Invalid boundary condition type. Supported values are 'dirichlet', 'neumann', 'robin'.")
@@ -147,10 +147,10 @@ def solve_pde(N, a, b, D, u0, t_max, dt, bc_type, method, q, alpha, beta, delta=
 
     # plot the solution
     plt.figure()
-    if bc_type == "neumann":
-        plt.plot(x[1:], u[-1], 'o', label="Method = {}".format(method))
-    else:
+    if bc_type == "dirichlet":
         plt.plot(x[1:-1], u[-1], 'o', label="Method = {}".format(method))
+    else:
+        plt.plot(x[1:], u[-1], 'o', label="Method = {}".format(method))
     plt.xlabel("x")
     plt.ylabel("u(x, t)")
     plt.title("Solution for {} method with {} boundary condition".format(method,bc_type))
@@ -160,7 +160,12 @@ def solve_pde(N, a, b, D, u0, t_max, dt, bc_type, method, q, alpha, beta, delta=
 
 # define the source term for the bratu equation (e^mu*u)
 def q(x, t, u, mu):
-    return np.exp(mu*u)
+    return (1-u)*np.exp(-x)
+
+#def q(x, t, u, mu):
+#    return np.exp(mu*u)
+
+# define the source term for the 
 
 # define the initial condition
 def u0(x, t):

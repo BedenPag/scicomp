@@ -3,16 +3,25 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Natural parameter continuation
-
-def f(x, c):
-    return x**3 - x + c
-
 def natural_param_cont(f, x0, c0, c1):
+    '''
+    Preforms natural parameter continuation on a one dimensional ODE.
+
+    Args:
+        f (callable): Function representing the ODE to be solved.
+        x0 (float): Initial value of the dependent variable.
+        c0 (float): Initial value of the parameter.
+        c1 (float): Final value of the parameter.
+    
+    Returns:
+        c_array (array): Array of parameter values.
+        solutions (array): Array of solutions.
+    '''
     c = np.linspace(c0, c1, 500) # Parameter range - interestingly it doesn't plot the entire range if num of points < 101
-    solutions = [x0]
-    c_array = [c0]
-    failed_c = []
-    for i in range(len(c)-1):
+    solutions = [x0] # Initialise the solutions array
+    c_array = [c0] # Initialise the parameter array
+    failed_c = [] # Initialise the failed parameter array
+    for i in range(len(c)-1): 
         sol = root(f,solutions[-1],args=(c[i]))
         if sol.success == True:
             solutions.append(sol.x[0])
@@ -26,12 +35,24 @@ def natural_param_cont(f, x0, c0, c1):
 # Psuedo-arclength continuation
 
 def arclength_cont(f, x0, c0, c1):
+    '''
+    Preforms pseudo-arclength continuation on a one dimensional ODE.
+
+    Args:
+        f (callable): Function representing the ODE to be solved.
+        x0 (float): Initial value of the dependent variable.
+        c0 (float): Initial value of the parameter.
+        c1 (float): Final value of the parameter.
+    
+    Returns:
+        c_array (array): Array of parameter values.
+        solutions (array): Array of solutions.
+    '''
     c = np.linspace(c0, c1, 500)
-    x = [x0]
-    solutions = np.array([])
-    c_array = np.array([])
+    solutions = np.array([]) # Initialise the solutions array
+    c_array = np.array([]) # Initialise the parameter array
     for i in [0,1]: # Find the first two values of x for the first two values of c
-        sol = root(f, x[-1], args=(c[i]))
+        sol = root(f, x0, args=(c[i]))
         if sol.success == True:
             solutions = np.append(solutions, sol.x[0])
             c_array = np.append(c_array, c[i])
@@ -66,7 +87,23 @@ x0 = 1
 c0 = -2
 c1 = 2
 
+def f(x, c):
+    return x**3 - x + c
+
 def plot_continuation(f, x0, c0, c1, method):
+    '''
+    Plots the solutions of a one dimensional ODE against the parameter.
+
+    Args:
+        f (callable): Function representing the ODE to be solved.
+        x0 (float): Initial value of the dependent variable.
+        c0 (float): Initial value of the parameter.
+        c1 (float): Final value of the parameter.
+        method (str): Method of continuation to be used. Either 'natural' or 'arclength'.
+    
+    Returns:
+        None - plots the solutions against the parameter.
+    '''
     if method == 'natural':
         c, x = natural_param_cont(f, x0, c0, c1)
         plt.plot(c, x, 'o')
@@ -81,6 +118,8 @@ def plot_continuation(f, x0, c0, c1, method):
         plt.ylabel('x')
         plt.title('Psuedo-arclength continuation')
         plt.show()
+    else:
+        raise ValueError('Invalid method of continuation. Please enter either "natural" or "arclength"')
 
 plot_continuation(f, x0, c0, c1, 'natural')
 plot_continuation(f, x0, c0, c1, 'arclength')

@@ -53,8 +53,8 @@ def solve_bvp(N, a, b, alpha, beta, q, bc_type, gamma=None, delta=None):
         plt.plot(x[1:], u, 'o', label = 'Finite-difference solution')
     else:
         # solve the linear system
-        u = np.linalg.solve(A, -b - dx**2 * q(x[1:-1]))
-        plt.plot(x[1:-1], u, 'o', label = 'Finite-difference solution')
+        u = np.linalg.solve(A, -b - dx**2 * q(x[1:]))
+        plt.plot(x[1:], u, 'o', label = 'Finite-difference solution')
     plt.xlabel('x')
     plt.ylabel('u(x)')
     plt.title('Finite-difference solution with {} BC'.format(bc_type.capitalize()))

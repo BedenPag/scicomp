@@ -92,7 +92,33 @@ def plot_limit_cycle(f, u0, deltat_max, method):
 
     # Plot the limit cycle for the shooting method
     plt.plot(x_values, y_values)
-    plt.xlabel('Prey')
-    plt.ylabel('Predator')
-    plt.title('Limit Cycle for the Shooting Method with b = 0.2')
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title('Limit Cycle for the Shooting Method')
     plt.show()
+
+def plot_solution(f, u0, deltat_max, method):
+    '''
+    Plot the solution for the shooting method.
+        
+    Args:
+        f (function): The function that defines the ODE system.
+        u0 (list): The initial conditions.
+        deltat_max (float): The maximum time step.
+        method (string): The method to be used to solve the ODE.
+            
+    Returns:
+        None - The plot for the solution using the shooting method.
+    '''
+
+    t_values, values = solve_to_shooting(f, u0, 0, deltat_max, method)
+    x_values = [x[0] for x in values] # Extract the x values from the list of values
+    y_values = [x[1] for x in values] # Extract the y values from the list of values
+
+    # Plot the solution for the shooting method
+    plt.plot(t_values, x_values, label = 'x')
+    plt.plot(t_values, y_values, label = 'y')
+    plt.xlabel('Time')
+    
+    plt.title('Solution for the Shooting Method')
+    plt.legend()
