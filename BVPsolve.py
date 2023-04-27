@@ -18,8 +18,27 @@ def solve_bvp(N, a, b, alpha, beta, q, bc_type, gamma=None, delta=None):
         delta (float, optional): Coefficient of the Neumann boundary condition at x=b. Required for "neumann" BC. Default: None.
 
     Returns:
-        None
+        None - plots the solution.
     """
+    if N < 1:
+        raise ValueError("N must be greater than or equal to 1.")
+    if a >= b:
+        raise ValueError("a must be less than b.")
+    if a == b:
+        raise ValueError("a and b cannot be equal.")
+    if bc_type == "robin" and gamma is None:
+        raise ValueError("gamma must be provided for Robin boundary condition.")
+    if bc_type == "neumann" and delta is None:
+        raise ValueError("delta must be provided for Neumann boundary condition.")
+    if not callable(q):
+        raise TypeError("q must be a function.")
+    if alpha is None or beta is None:
+        raise ValueError("alpha and beta must be provided for boundary conditions.")
+    if gamma is not None and not isinstance(gamma, (float, int)) or delta is not None and not isinstance(delta, (float, int)) or not isinstance(alpha, (float, int)) or not isinstance(beta, (float, int)):
+        raise TypeError("alpha, beta, gamma, and delta must be numbers.")
+    if q is None:
+        raise ValueError("q must be provided. If q is constant, use lambda x: constant.")
+    
     # create the finite-difference grid
     grid = Grid(N=N, a=a, b=b)
     dx = grid.dx
