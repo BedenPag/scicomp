@@ -84,14 +84,6 @@ def arclength_cont(f, x0, c0, c1):
             i += 0.01
     return c_array, solutions
 
-# Define the initial guess and the parameter range
-x0 = 1
-c0 = -2
-c1 = 2
-
-def f(x, c):
-    return x**3 - x + c
-
 def plot_continuation(f, x0, c0, c1, method):
     '''
     Plots the solutions of a one dimensional ODE against the parameter.
@@ -133,7 +125,4 @@ def plot_continuation(f, x0, c0, c1, method):
         plt.ylabel('x')
         plt.title('Psuedo-arclength continuation')
         plt.show()
-
-plot_continuation(f, x0, c0, c1, 'natural')
-plot_continuation(f, x0, c0, c1, 'arclength')
 

@@ -80,8 +80,8 @@ def solve_to(f, x0, t0, deltat_max, step_function, true_sol=None):
     values = [x]
     t_values = [t]
     while t <= 21:
-        x = step_function(f, t, x, deltat_max)
-        t += deltat_max
+        x = step_function(f, t, x, deltat_max) # Take a single step
+        t += deltat_max 
         t_values.append(t)
         values.append(x)
     
@@ -125,7 +125,7 @@ def compare_euler_rk4_error(f, x0, t0, delta_t_values):
     plt.legend()
     plt.show()
 
-def solve_euler_rk4(f, x0, t0, deltat_max, step_function, true_sol=None):
+def plot_euler_rk4(f, x0, t0, deltat_max, step_function, true_sol=None):
     """
     Solve the ODE using Euler's method and Runge-Kutta (RK4) method for different step sizes.
 
