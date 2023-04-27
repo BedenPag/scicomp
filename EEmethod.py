@@ -41,12 +41,12 @@ def heat_equation_solver(kappa, L, T, u_I, u_exact, mx, mt, method):
     for j in range(0, mt):
         # Forward Euler timestep for the PDE
         # PDE discretized at position x[i], time t[j]
-        if method == 'FE':
+        if method == 'EE':
             for i in range(1, mx):
                 u_t1[i] = u_t[i] + lamda * (u_t[i - 1] - 2 * u_t[i] + u_t[i + 1])
         # Backward Euler timestep for the PDE
         # PDE discretized at position x[i], time t[j]
-        elif method == 'BE':
+        elif method == 'IE':
             for i in range(1, mx):
                 u_t1[i] = (u_t[i] + lamda * (u_t[i - 1] + u_t[i + 1])) / (1 + 2 * lamda) # DOES NOT WORK
         # Crank-Nicolson timestep for the PDE
@@ -95,4 +95,4 @@ mt = 1000   # number of grid points in time
 
 # Call the heat_equation_solver function
 
-heat_equation_solver(kappa, L, T, u_I, u_exact, mx, mt, 'FE')
+heat_equation_solver(kappa, L, T, u_I, u_exact, mx, mt, 'EE')
